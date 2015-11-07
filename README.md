@@ -41,7 +41,7 @@ audio.addEventListener('canplaythrough',()=>{
 })
 ```
 
-If `audio.autoplay` is true, to playback(simulation) until `src.duration`.
+If `audio.autoplay` is true(or `.play()`), to playback(simulation) until `src.duration`.
 
 ```js
 let audio= new Audio
