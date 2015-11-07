@@ -1,5 +1,7 @@
+// Dependencies
 import {EventEmitter} from 'events'
 
+// Public
 class EventTarget extends EventEmitter{
   constructor(){
     super()
@@ -15,7 +17,7 @@ class EventTarget extends EventEmitter{
 
     return super.emit(...args)
   }
-  
+
   addEventListener(...args){
     return super.addListener(...args)
   }

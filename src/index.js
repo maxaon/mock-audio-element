@@ -1,8 +1,10 @@
+// Dependencies
 import EventTarget from './event-target'
 
 import musicMetaData from 'musicmetadata'
 import request from 'request'
 
+// Public
 class Audio extends EventTarget{
   constructor(url){
     super()
@@ -17,12 +19,9 @@ class Audio extends EventTarget{
     this.paused= true
     this.ended= false
     this.error= null
-    
+
     this.currentTime= 0
     this.duration= NaN
-
-    this._pause()
-    this.removeAllListeners()
 
     setTimeout(()=>{
       if(this.src){
@@ -43,7 +42,6 @@ class Audio extends EventTarget{
 
     this._loadstart= true
 
-    let duration= 0
     request(this.src,{encoding:null},(error,response,buffer)=>{
       if(error){
         this.error= error
@@ -87,6 +85,7 @@ class Audio extends EventTarget{
     this.emit('pause')
 
     this.paused= true
+    this.autoplay= false
     this._pause()
   }
   _pause(){

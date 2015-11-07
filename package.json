@@ -1,6 +1,6 @@
 {
   "name": "mock-audio-element",
-  "version": "0.0.0-alpha",
+  "version": "0.0.0-beta",
   "description": "minimum implementation of HTML5 Audio events",
 
   "main": "lib",
@@ -12,9 +12,9 @@
     "start": "mocha --compilers js:espower-babel/guess --bail --full-trace --watch",
 
     "test": "babel-node node_modules/.bin/isparta cover --report text --report html --report lcov node_modules/.bin/_mocha",
-    "posttest": "eslint src test",
+    "posttest": "eslint src test --config node_modules/eslint-config-59naga/.eslintrc",
 
-    "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
+    "preversion": "npm run compile",
     "compile": "babel src --out-dir lib"
   },
   "config": {
@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "babel": "^5.8.29",
-    "babel-eslint": "^4.1.3",
-    "eslint": "^1.7.3",
+    "eslint": "^1.9.0",
+    "eslint-config-59naga": "0.0.1",
     "espower-babel": "^3.3.0",
     "ghooks": "^0.3.2",
     "isparta": "^3.1.0",
