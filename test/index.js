@@ -1,6 +1,5 @@
 import Audio from '../src'
 import assert,{deepEqual} from 'power-assert'
-import express from 'express'
 
 process.env.MOCK_AUDIO_ELEMENT_TEST= true
 const fixtureURL= 'http://static.edgy.black/fixture.mp3'

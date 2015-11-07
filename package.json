@@ -14,7 +14,7 @@
     "test": "babel-node node_modules/.bin/isparta cover --report text --report html --report lcov node_modules/.bin/_mocha",
     "posttest": "eslint src test",
 
-    "prepublish": "node -e \"if(process.env.TRAVIS){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
+    "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
     "compile": "babel src --out-dir lib"
   },
   "dependencies": {
@@ -24,14 +24,13 @@
   "devDependencies": {
     "babel": "^5.8.29",
     "babel-eslint": "^4.1.3",
-    "espower-babel": "^3.3.0",
     "eslint": "^1.7.3",
-    "mocha": "^2.3.3",
-    "power-assert": "^1.1.0",
-    "request": "^2.65.0",
+    "espower-babel": "^3.3.0",
     "ghooks": "^0.3.2",
     "isparta": "^3.1.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "power-assert": "^1.1.0",
+    "request": "^2.65.0"
   },
   "babel": {
     "stage": 0
