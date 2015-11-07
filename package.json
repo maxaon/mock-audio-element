@@ -1,6 +1,6 @@
 {
   "name": "mock-audio-element",
-  "version": "0.0.0-beta",
+  "version": "0.0.0-beta.1",
   "description": "minimum implementation of HTML5 Audio events",
 
   "main": "lib",
@@ -14,7 +14,7 @@
     "test": "babel-node node_modules/.bin/isparta cover --report text --report html --report lcov node_modules/.bin/_mocha",
     "posttest": "eslint src test --config node_modules/eslint-config-59naga/.eslintrc",
 
-    "preversion": "npm run compile",
+    "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
     "compile": "babel src --out-dir lib"
   },
   "config": {
