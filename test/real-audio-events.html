@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real audio events</title>
+  <style>
+  *{
+    margin: 0;
+    padding: 0;
+    font-family: Monaco, monospace;
+    font-size: small;
+  }
+  article{
+    display: flex;
+  }
+  article section{
+    flex: 1;
+    margin: 1em;
+  }
+  article section h2{
+    font-size: x-large;
+  }
+  article section pre{
+    width: 100%;
+    word-break: break-word;
+    overflow: scroll;
+  }
+
+  strong{
+    background:pink;
+  }
+  </style>
+  <script src="https://cdn.rawgit.com/kpdecker/jsdiff/49dece07ae3b3e9e2e9a57592f467de3dff1aabc/diff.js"></script>
+  <script>
+var createAudioTest= function(reportElement){
+  var audio= new Audio
+  var props= [
+    // 'audioTracks',
+    'autoplay',
+    // 'buffered',
+    // 'controller',
+    // 'controls',
+    'crossOrigin',
+    // 'currentSrc',
+    'currentTime',
+    // 'defaultMuted',
+    // 'defaultPlaybackRate',
+    'duration',
+    'ended',
+    'error',
+    'loop',
+    'mediaGroup',
+    'muted',
+    'networkState',
+    'paused',
+    // 'playbackRate',
+    // 'played',
+    // 'preload',
+    'readyState',
+    // 'seekable',
+    // 'seeking',
+    // 'src',
+    // 'startDate',
+    // 'textTracks',
+    // 'videoTracks',
+    // 'volume',
+  ]
+  var events= [
+    'loadstart',
+    'progress',
+    'suspend',
+    'load',
+    'abort',
+    'error',
+    'emptied',
+    'stalled',
+    'play',
+    'pause',
+    'loadedmetadata',
+    'loadeddata',
+    'waiting',
+    'playing',
+    'canplay',
+    'canplaythrough',
+    'seeking',
+    'seeked',
+    'timeupdate',
+    'ended',
+    'ratechange',
+    'durationchange',
+    'volumechange',
+  ]
+
+  var prevResult= ''
+  events.forEach(function(name){
+    audio.addEventListener(name,function(){
+      var values= {}
+      props.forEach(function(prop){
+        values[prop]= audio[prop]
+      })
+
+      var result= JSON.stringify(values)
+      var diff= JsDiff.diffChars(prevResult,result)
+      var text= ''
+      diff.forEach(function(part){
+        var value= part.value
+        if(prevResult && part.added){
+          value= '<strong>'+part.value+'</strong>'
+        }
+        if(prevResult && part.removed){
+          value= ''
+        }
+        text+= value
+      })
+      reportElement.innerHTML+= name+':\n  '+text+'\n\n'
+      prevResult= result
+    })
+  })
+  return audio
+}
+  </script>
+</head>
+<body>
+
+<article>
+  <section>
+    <h2>.load()</h2>
+    <pre>
+var audio= createAudioTest(document.querySelector('#test1'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.load()
+    </pre>
+
+    <h2>events</h2>
+    <pre id="test1"></pre>
+    <script>
+var audio= createAudioTest(document.querySelector('#test1'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.load()
+    </script>
+  </section>
+
+  <section>
+    <h2>.play()</h2>
+    <pre>
+var audio= createAudioTest(document.querySelector('#test2'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.play()
+audio.currentTime= 120
+    </pre>
+
+    <h2>events</h2>
+    <pre id="test2"></pre>
+    <script>
+var audio= createAudioTest(document.querySelector('#test2'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.play()
+audio.currentTime= 120
+    </script>
+  </section>
+
+  <section>
+    <h2>.autoplay</h2>
+    <pre>
+var audio= createAudioTest(document.querySelector('#test3'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.autoplay= true
+    </pre>
+
+    <h2>events</h2>
+    <pre id="test3"></pre>
+    <script>
+var audio= createAudioTest(document.querySelector('#test3'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.autoplay= true
+    </script>
+  </section>
+
+  <section>
+    <h2>.pause()</h2>
+    <pre>
+var audio= createAudioTest(document.querySelector('#test4'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.muted= true
+audio.play()
+audio.pause()
+    </pre>
+
+    <h2>events</h2>
+    <pre id="test4"></pre>
+    <script>
+var audio= createAudioTest(document.querySelector('#test4'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.volume= 0.1
+audio.muted= true
+audio.play()
+audio.pause()
+    </script>
+  </section>
+
+  <section>
+    <h2>.loop</h2>
+    <pre>
+var audio= createAudioTest(document.querySelector('#test5'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.muted= true
+audio.loop= true
+audio.currentTime= 120
+audio.play()
+    </pre>
+
+    <h2>events</h2>
+    <pre id="test5"></pre>
+    <script>
+var audio= createAudioTest(document.querySelector('#test5'))
+audio.src= 'http://static.edgy.black/fixture.mp3'
+audio.muted= true
+audio.loop= true
+audio.currentTime= 120
+audio.play()
+    </script>
+  </section>
+</article>
+
+</body>
+</html>
