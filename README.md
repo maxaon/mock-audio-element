@@ -13,6 +13,8 @@ $ npm install mock-audio-element --save
 (WIP) an unreal audio elements. dispatch few events and change the limited properties.
 
 ```js
+import Audio from 'mock-audio-element'
+
 let audio= new Audio
 console.log(audio)
 // {
