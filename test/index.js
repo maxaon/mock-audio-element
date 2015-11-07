@@ -5,7 +5,7 @@ process.env.MOCK_AUDIO_ELEMENT_TEST= true
 const fixtureURL= 'http://static.edgy.black/fixture.mp3'
 
 describe('method',function(){
-  this.timeout(5000)
+  this.timeout(10000)
 
   it('.load()',(done)=>{
     let audio= new Audio
