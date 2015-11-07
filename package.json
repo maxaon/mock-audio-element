@@ -17,6 +17,12 @@
     "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
     "compile": "babel src --out-dir lib"
   },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm test"
+    }
+  },
+  
   "dependencies": {
     "musicmetadata": "^2.0.2",
     "request": "^2.65.0"
