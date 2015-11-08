@@ -73,20 +73,20 @@ class Audio extends EventTarget{
     this._play()
   }
   _play(){
-    this.emit('play')
-
     this.paused= false
     this._previous= Date.now()
 
     this._pause()
     this._timeupdateId= setInterval(::this._timeupdate,100)
+
+    this.emit('play')
   }
   pause(){
-    this.emit('pause')
-
     this.paused= true
     this.autoplay= false
     this._pause()
+
+    this.emit('pause')
   }
   _pause(){
     clearInterval(this._timeupdateId)

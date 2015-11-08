@@ -38,6 +38,28 @@ describe('method',function(){
 
     setTimeout(()=>{
       audio.pause()
-    },500)
+    })
+  })
+
+  it('#2',(done)=>{
+    let audio= new Audio
+    audio.src= fixtureURL
+
+    audio.addEventListener('canplaythrough',()=>{
+      audio.play()
+    })
+    audio.addEventListener('play',()=>{
+      deepEqual(audio._eventHistory,[
+        'canplaythrough',
+        'play',
+      ])
+
+      assert(audio.paused===false)
+      assert(audio.duration===120.63985)
+      assert(audio.currentTime===0)
+
+      audio.pause()
+      done()
+    })
   })
 })

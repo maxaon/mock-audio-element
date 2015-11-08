@@ -1,6 +1,6 @@
 {
   "name": "mock-audio-element",
-  "version": "0.0.0-beta.1",
+  "version": "0.0.0-beta.2",
   "description": "minimum implementation of HTML5 Audio events",
 
   "main": "lib",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "babel": "^5.8.29",
     "eslint": "^1.9.0",
-    "eslint-config-59naga": "0.0.1",
+    "eslint-config-59naga": "0.0.4",
     "espower-babel": "^3.3.0",
     "ghooks": "^0.3.2",
     "isparta": "^3.1.0",
