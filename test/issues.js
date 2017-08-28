@@ -8,7 +8,7 @@ process.env.MOCK_AUDIO_ELEMENT_TEST = true;
 const fixtureURL = 'http://static.edgy.black/fixture.mp3';
 
 // Specs
-describe('method', function () {
+describe('Issues', function () {
   this.timeout(10000);
 
   beforeEach(() => {

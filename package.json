@@ -1,6 +1,6 @@
 {
-  "name": "mock-audio-element",
-  "version": "0.0.0-beta.2",
+  "name": "mock-audio-element-adv",
+  "version": "0.1.0",
   "description": "minimum implementation of HTML5 Audio events",
   "main": "lib",
   "files": [
@@ -28,9 +28,12 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-istanbul": "^4.1.4",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2017": "^6.24.1",
     "babel-register": "^6.26.0",
     "chai": "^4.1.1",
+    "chai-as-promised": "^7.1.1",
     "cross-env": "^5.0.5",
     "eslint": "^4.5.0",
     "eslint-config-xo": "^0.18.2",
@@ -40,10 +43,8 @@
     "mocha": "^3.5.0",
     "nock": "^9.0.14",
     "nyc": "^11.1.0",
-    "power-assert": "^1.4.4"
-  },
-  "babel": {
-    "stage": 0
+    "power-assert": "^1.4.4",
+    "sinon": "^3.2.1"
   },
   "keywords": [
     "audio",
@@ -52,15 +53,18 @@
     "test"
   ],
   "author": "59naga <i59naga@icloud.com> (http://berabou.me)",
+  "contributors": [
+    "Peter K <3187207+maxaon@users.noreply.github.com>"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/59naga/mock-audio-element.git"
+    "url": "git+https://github.com/maxaon/mock-audio-element-adv.git"
   },
   "bugs": {
-    "url": "https://github.com/59naga/mock-audio-element/issues"
+    "url": "https://github.com/maxaon/mock-audio-element-adv/issues"
   },
-  "homepage": "https://github.com/59naga/mock-audio-element#readme",
+  "homepage": "https://github.com/maxaon/mock-audio-element-adv#readme",
   "eslintConfig": {
     "extends": "eslint-config-xo",
     "rules": {

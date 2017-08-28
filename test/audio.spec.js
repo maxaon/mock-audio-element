@@ -1,12 +1,12 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import Audio from '../src';
-import {AUDIO_DURATION, installFixture} from './fixture/fixture';
+import {AUDIO_DURATION, FIXTURE_URL, installFixture} from './fixture/fixture';
 // Environment
 process.env.MOCK_AUDIO_ELEMENT_TEST = true;
-const fixtureURL = 'http://static.edgy.black/fixture.mp3';
+
 // Specs
-describe('method', function () {
+describe('Audio', function () {
   this.timeout(10000);
   beforeEach(() => {
     installFixture();
@@ -14,7 +14,7 @@ describe('method', function () {
 
   it('.load()', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.load();
 
     audio.addEventListener('canplaythrough', () => {
@@ -37,7 +37,7 @@ describe('method', function () {
 
   it('.play()', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.play();
     audio.addEventListener('timeupdate', () => {
       expect(audio.currentTime).is.not.equal(0);
@@ -71,7 +71,7 @@ describe('method', function () {
 
   it('.play() should emit 5 timeupdate events', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.play();
     const timeupdateCalls = [24, 48, 72, 96, 120];
     let i = 0;
@@ -92,7 +92,7 @@ describe('method', function () {
   });
   it('.play() should emit 1 timeupdate when next event fired after seek', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.play();
     const spy = sinon.stub().callsFake(function () {
       expect(audio.currentTime).to.equal(120);
@@ -114,9 +114,9 @@ describe('method', function () {
 
   it('.autoplay', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.autoplay = true;
-    console.log('addEvents', 'addEvents');
+
     audio.addEventListener('play', () => {
       expect(audio.paused).to.equal(false);
       audio.currentTime = 119.6;
@@ -147,7 +147,7 @@ describe('method', function () {
 
   it('.pause()', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.play();
     audio.once('playing', () => {
       audio.pause();
@@ -185,7 +185,7 @@ describe('method', function () {
 
   it('.loop', done => {
     let audio = new Audio();
-    audio.src = fixtureURL;
+    audio.src = FIXTURE_URL;
     audio.loop = true;
     audio.play();
 
