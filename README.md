@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-$ npm install mock-audio-element --save
+$ npm install mock-audio-element-adv --save
 ```
 
 # class Audio
@@ -13,7 +13,7 @@ $ npm install mock-audio-element --save
 (WIP) an unreal audio elements. dispatch few events and change the limited properties.
 
 ```js
-import {Audio} from 'mock-audio-element';
+import {Audio} from 'mock-audio-element-adv';
 
 let audio= new Audio();
 console.log(audio)
@@ -110,6 +110,37 @@ audio.addEventListener('timeupdate',(data)=>{
   console.log(data)// undefined
 })
 ```
+
+## Additional methods 
+
+### createWithAbortError
+
+Create Audio class that has play method that return promise and rejects it when content is not downloaded or called pause
+
+```js
+import {createWithAbortError} from 'mock-audio-element-adv';
+
+const {Audio} = createWithAbortError();
+const audio = new Audio('file.mp3');
+audio.play()
+  .catch(reason => console.error(reason)); // Will log error with name 'AbortError'
+audio.pause();
+``` 
+
+### createWithNotAllowed
+
+Create Audio class that has play method that return promise and rejects when action was not made by user.
+```js
+import {createAudioWithNotAllowedError} from 'mock-audio-element-adv';
+
+const {Audio, testkit} = createAudioWithNotAllowedError();
+const audioByUser = new Audio('file.mp3');
+audio.play().then(() => console.log('ok'));
+testkit.setIsByUserAction(false);
+const audioByProgram = new Audio('file.mp3');
+audio.play().catch(reason => console.error(reason)); // Will log error with name 'NotAllowedError'
+
+``` 
 
 License
 ---
