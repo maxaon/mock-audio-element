@@ -1,22 +1,18 @@
 {
-  "name": "mock-audio-element",
-  "version": "0.0.0-beta.2",
+  "name": "mock-audio-element-adv",
+  "version": "0.1.0",
   "description": "minimum implementation of HTML5 Audio events",
-
   "main": "lib",
   "files": [
     "lib"
   ],
-
   "engines": {
-    "npm" : "^3.3.9"
+    "npm": "^3.3.9"
   },
   "scripts": {
     "start": "mocha --compilers js:espower-babel/guess --bail --full-trace --watch",
-
-    "test": "babel-node node_modules/.bin/isparta cover --report text --report html --report lcov node_modules/.bin/_mocha",
-    "posttest": "eslint src test --config node_modules/eslint-config-59naga/.eslintrc",
-
+    "test": "cross-env NODE_ENV=test nyc mocha",
+    "posttest": "eslint src test",
     "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
     "compile": "babel src --out-dir lib"
   },
@@ -25,26 +21,31 @@
       "pre-commit": "npm test"
     }
   },
-  
   "dependencies": {
-    "musicmetadata": "^2.0.2",
-    "request": "^2.65.0"
+    "musicmetadata": "^2.0.5",
+    "request": "^2.81.0"
   },
   "devDependencies": {
-    "babel": "^5.8.29",
-    "eslint": "^1.9.0",
-    "eslint-config-59naga": "0.0.4",
-    "espower-babel": "^3.3.0",
-    "ghooks": "^0.3.2",
-    "isparta": "^3.1.0",
-    "mocha": "^2.3.3",
-    "power-assert": "^1.1.0",
-    "request": "^2.65.0"
+    "babel-cli": "^6.26.0",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.1",
+    "chai-as-promised": "^7.1.1",
+    "cross-env": "^5.0.5",
+    "eslint": "^4.5.0",
+    "eslint-config-xo": "^0.18.2",
+    "espower-babel": "^4.0.3",
+    "ghooks": "^2.0.0",
+    "isparta": "^4.0.0",
+    "mocha": "^3.5.0",
+    "nock": "^9.0.14",
+    "nyc": "^11.1.0",
+    "power-assert": "^1.4.4",
+    "sinon": "^3.2.1"
   },
-  "babel": {
-    "stage": 0
-  },
-
   "keywords": [
     "audio",
     "tdd",
@@ -52,13 +53,38 @@
     "test"
   ],
   "author": "59naga <i59naga@icloud.com> (http://berabou.me)",
+  "contributors": [
+    "Peter K <3187207+maxaon@users.noreply.github.com>"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/59naga/mock-audio-element.git"
+    "url": "git+https://github.com/maxaon/mock-audio-element-adv.git"
   },
   "bugs": {
-    "url": "https://github.com/59naga/mock-audio-element/issues"
+    "url": "https://github.com/maxaon/mock-audio-element-adv/issues"
   },
-  "homepage": "https://github.com/59naga/mock-audio-element#readme"
+  "homepage": "https://github.com/maxaon/mock-audio-element-adv#readme",
+  "eslintConfig": {
+    "extends": "eslint-config-xo",
+    "rules": {
+      "linebreak-style": 0,
+      "indent": [
+        "error",
+        2
+      ]
+    }
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "html"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  }
 }
