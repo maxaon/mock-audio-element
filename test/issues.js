@@ -1,4 +1,4 @@
-import assert, {deepEqual} from 'power-assert';
+import {expect} from 'chai';
 // Dependencies
 import Audio from '../src';
 import {AUDIO_DURATION, installFixture} from './fixture/fixture';
@@ -10,11 +10,12 @@ const fixtureURL = 'http://static.edgy.black/fixture.mp3';
 // Specs
 describe('method', function () {
   this.timeout(10000);
+
   beforeEach(() => {
     installFixture();
   });
 
-  it('#1', done => {
+  it('#1 should emit pause after play', done => {
     let audio = new Audio();
     audio.src = fixtureURL;
     audio.play();
@@ -23,19 +24,25 @@ describe('method', function () {
       audio = null;
       done(new Error('detect leaks'));
     });
+
     audio.addEventListener('canplaythrough', () => {
       if (audio === null) {
         return;
       }
 
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
+        'play',
+        'loadstart',
         'pause',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
         'canplaythrough'
       ]);
 
-      assert(audio.paused);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(audio.currentTime === 0);
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(0);
 
       done();
     });
@@ -45,22 +52,27 @@ describe('method', function () {
     });
   });
 
-  it('#2', done => {
+  it('#2 should ', done => {
     let audio = new Audio();
     audio.src = fixtureURL;
 
     audio.addEventListener('canplaythrough', () => {
       audio.play();
     });
+
     audio.addEventListener('play', () => {
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
+        'loadstart',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
         'canplaythrough',
         'play'
       ]);
 
-      assert(audio.paused === false);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(audio.currentTime === 0);
+      expect(audio.paused).to.equal(false);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(0);
 
       audio.pause();
       done();

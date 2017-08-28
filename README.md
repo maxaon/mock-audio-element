@@ -92,11 +92,15 @@ audio.addEventListener('timeupdate',()=>{
 
 There is a possibility to dispatch an __following events only__.
 
-* error
-* canplaythrough
 * play
-* pause
+* loadstart
+* durationchange
+* loadedmetadata
+* canplay
+* playing
+* canplaythrough
 * timeupdate
+* pause
 * ended
 
 In addition, only dispatch the event. nothing sends data.

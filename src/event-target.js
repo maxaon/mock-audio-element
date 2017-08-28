@@ -13,10 +13,10 @@ class EventTarget extends EventEmitter {
 
   emit(...args) {
     if (this._eventHistory) {
+      console.log('event', args[0]);
       this._eventHistory.push(args[0]);
     }
-
-    return super.emit(...args);
+    setTimeout(() => super.emit(...args), 0);
   }
 
   addEventListener(...args) {

@@ -3,6 +3,8 @@ import request from 'request';
 // Dependencies
 import EventTarget from './event-target';
 
+const nexTick = fn => setTimeout(fn, 0);
+
 // Public
 class Audio extends EventTarget {
   constructor(url) {
@@ -22,13 +24,35 @@ class Audio extends EventTarget {
     this.currentTime = 0;
     this.duration = NaN;
 
-    setTimeout(() => {
+    nexTick(() => {
       if (this.src) {
         this.load();
       }
     });
 
     this._timeupdate = this._timeupdate.bind(this);
+  }
+
+  get autoplay() {
+    return this.__autoplay;
+  }
+
+  set autoplay(value) {
+    this.__autoplay = value;
+    if (this.__src && this.__autoplay) {
+      nexTick(() => this.play(), 0);
+    }
+  }
+
+  get src() {
+    return this.__src;
+  }
+
+  set src(value) {
+    this.__src = value;
+    if (this.__src && this.__autoplay) {
+      nexTick(() => this.play(), 0);
+    }
   }
 
   load() {
@@ -43,6 +67,7 @@ class Audio extends EventTarget {
     }
 
     this._loadstart = true;
+    this.emit('loadstart');
 
     request(this.src, {encoding: null}, (error, response, buffer) => {
       if (error) {
@@ -57,6 +82,9 @@ class Audio extends EventTarget {
         }
 
         this.duration = meta.duration;
+        this.emit('durationchange');
+        this.emit('loadedmetadata');
+        this.emit('canplay');
 
         if (this.autoplay) {
           this._play();
@@ -68,12 +96,17 @@ class Audio extends EventTarget {
   }
 
   play() {
-    if (isNaN(this.duration)) {
-      this.autoplay = true;
-      return this.load();
-    }
+    this.paused = false;
+    this.emit('play');
 
-    this._play();
+    nexTick(() => {
+      if (isNaN(this.duration)) {
+        this.__autoplay = true;
+        return this.load();
+      }
+
+      this._play();
+    });
   }
 
   _play() {
@@ -83,7 +116,7 @@ class Audio extends EventTarget {
     this._pause();
     this._timeupdateId = setInterval(this._timeupdate, 100);
 
-    this.emit('play');
+    this.emit('playing');
   }
 
   pause() {

@@ -1,7 +1,6 @@
-import assert, {deepEqual} from 'power-assert';
+import {expect} from 'chai';
 import Audio from '../src';
 import {AUDIO_DURATION, installFixture} from './fixture/fixture';
-
 // Environment
 process.env.MOCK_AUDIO_ELEMENT_TEST = true;
 const fixtureURL = 'http://static.edgy.black/fixture.mp3';
@@ -18,12 +17,17 @@ describe('method', function () {
     audio.load();
 
     audio.addEventListener('canplaythrough', () => {
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
+        'loadstart',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
         'canplaythrough'
       ]);
-      assert(audio.paused);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(audio.currentTime === 0);
+
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(0);
 
       audio.pause();
       done();
@@ -37,8 +41,13 @@ describe('method', function () {
     audio.currentTime = 119.5;
 
     audio.addEventListener('ended', () => {
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
         'play',
+        'loadstart',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
+        'playing',
         'canplaythrough',
         'timeupdate',
         'timeupdate',
@@ -49,9 +58,9 @@ describe('method', function () {
         'ended'
       ]);
 
-      assert(audio.paused);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(audio.currentTime === AUDIO_DURATION);
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(AUDIO_DURATION);
 
       audio.pause();
       done();
@@ -62,13 +71,20 @@ describe('method', function () {
     let audio = new Audio();
     audio.src = fixtureURL;
     audio.autoplay = true;
+    console.log('addEvents', 'addEvents');
     audio.addEventListener('play', () => {
+      expect(audio.paused).to.equal(false);
       audio.currentTime = 119.6;
     });
 
     audio.addEventListener('ended', () => {
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
+        'loadstart',
         'play',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
+        'playing',
         'canplaythrough',
         'timeupdate',
         'timeupdate',
@@ -78,9 +94,9 @@ describe('method', function () {
         'ended'
       ]);
 
-      assert(audio.paused);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(audio.currentTime === AUDIO_DURATION);
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(AUDIO_DURATION);
 
       audio.pause();
       done();
@@ -91,7 +107,7 @@ describe('method', function () {
     let audio = new Audio();
     audio.src = fixtureURL;
     audio.play();
-    audio.once('play', () => {
+    audio.once('playing', () => {
       audio.pause();
     });
     audio.once('pause', () => {
@@ -100,19 +116,25 @@ describe('method', function () {
     });
 
     audio.addEventListener('ended', () => {
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
         'play',
+        'loadstart',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
+        'playing',
+        'canplaythrough',
         'pause',
         'play',
-        'canplaythrough',
+        'playing',
         'timeupdate',
         'pause',
         'ended'
       ]);
 
-      assert(audio.paused);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(audio.currentTime === AUDIO_DURATION);
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(AUDIO_DURATION);
 
       audio.pause();
       done();
@@ -132,8 +154,13 @@ describe('method', function () {
         return;
       }
 
-      deepEqual(audio._eventHistory, [
+      expect(audio._eventHistory).to.deep.equal([
         'play',
+        'loadstart',
+        'durationchange',
+        'loadedmetadata',
+        'canplay',
+        'playing',
         'canplaythrough',
         'timeupdate',
         'timeupdate',
@@ -142,9 +169,9 @@ describe('method', function () {
         'timeupdate'
       ]);
 
-      assert(audio.paused === false);
-      assert(audio.duration === AUDIO_DURATION);
-      assert(Math.floor(audio.currentTime) === 0);
+      expect(audio.paused).to.equal(false);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(Math.floor(audio.currentTime)).to.equal(0);
 
       audio.pause();
       done();

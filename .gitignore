@@ -19,6 +19,7 @@ node_modules
 
 npm-debug.log
 .sass-cache
+.nyc_output
 dist
 *.private.*
 !*.private.demo.js
