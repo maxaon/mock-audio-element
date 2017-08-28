@@ -31,6 +31,7 @@ class Audio extends EventTarget {
     });
 
     this._timeupdate = this._timeupdate.bind(this);
+    this._timeupdateBase = 'steps';
   }
 
   get autoplay() {
@@ -112,9 +113,9 @@ class Audio extends EventTarget {
   _play() {
     this.paused = false;
     this._previous = Date.now();
-
+    this._lastChunk = 0;
     this._pause();
-    this._timeupdateId = setInterval(this._timeupdate, 100);
+    this._timeupdateId = setInterval(this._timeupdate, 50);
 
     this.emit('playing');
   }
@@ -132,15 +133,19 @@ class Audio extends EventTarget {
   }
 
   _timeupdate() {
-    let diff = Date.now() - this._previous;
-    this._previous = Date.now();
-    this.currentTime += diff / 1000;
+    if (this._timeupdateBase === 'steps') {
+      this._updateTimeByStep();
+    } else {
+      this._updateTimeByTime();
+    }
     if (this.currentTime >= this.duration) {
       this.currentTime = this.duration;
     }
+
     this.emit('timeupdate');
 
-    if (this.currentTime === this.duration) {
+    if (this.currentTime >= this.duration) {
+      this.currentTime = this.duration;
       if (this.loop) {
         this.currentTime = 0;
         return;
@@ -148,6 +153,18 @@ class Audio extends EventTarget {
       this.pause();
       this.emit('ended');
     }
+  }
+
+  _updateTimeByTime() {
+    let diff = Date.now() - this._previous;
+    this._previous = Date.now();
+    this.currentTime += diff / 1000;
+  }
+
+  _updateTimeByStep() {
+    const numberOfTimeupdateEvents = 5;
+    this._lastChunk++;
+    this.currentTime += this.duration / numberOfTimeupdateEvents;
   }
 }
 

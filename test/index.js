@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import sinon from 'sinon';
 import Audio from '../src';
 import {AUDIO_DURATION, installFixture} from './fixture/fixture';
 // Environment
@@ -38,8 +39,9 @@ describe('method', function () {
     let audio = new Audio();
     audio.src = fixtureURL;
     audio.play();
-    audio.currentTime = 119.5;
-
+    audio.addEventListener('timeupdate', () => {
+      expect(audio.currentTime).is.not.equal(0);
+    });
     audio.addEventListener('ended', () => {
       expect(audio._eventHistory).to.deep.equal([
         'play',
@@ -67,6 +69,49 @@ describe('method', function () {
     });
   });
 
+  it('.play() should emit 5 timeupdate events', done => {
+    let audio = new Audio();
+    audio.src = fixtureURL;
+    audio.play();
+    const timeupdateCalls = [24, 48, 72, 96, 120];
+    let i = 0;
+    const spy = sinon.stub().callsFake(function () {
+      expect(audio.currentTime).to.equal(timeupdateCalls[i]);
+      i++;
+    });
+
+    audio.addEventListener('timeupdate', spy);
+    audio.addEventListener('ended', () => {
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(AUDIO_DURATION);
+      expect(spy.callCount).to.equal(5);
+      audio.pause();
+      done();
+    });
+  });
+  it('.play() should emit 1 timeupdate when next event fired after seek', done => {
+    let audio = new Audio();
+    audio.src = fixtureURL;
+    audio.play();
+    const spy = sinon.stub().callsFake(function () {
+      expect(audio.currentTime).to.equal(120);
+    });
+
+    audio.addEventListener('timeupdate', spy);
+    audio.addEventListener('canplaythrough', () => {
+      audio.currentTime = 100;
+    });
+    audio.addEventListener('ended', () => {
+      expect(audio.paused).to.equal(true);
+      expect(audio.duration).to.equal(AUDIO_DURATION);
+      expect(audio.currentTime).to.equal(AUDIO_DURATION);
+      expect(spy.callCount).to.equal(1);
+      audio.pause();
+      done();
+    });
+  });
+
   it('.autoplay', done => {
     let audio = new Audio();
     audio.src = fixtureURL;
@@ -86,9 +131,6 @@ describe('method', function () {
         'canplay',
         'playing',
         'canplaythrough',
-        'timeupdate',
-        'timeupdate',
-        'timeupdate',
         'timeupdate',
         'pause',
         'ended'
@@ -145,7 +187,6 @@ describe('method', function () {
     let audio = new Audio();
     audio.src = fixtureURL;
     audio.loop = true;
-    audio.currentTime = 120.6;
     audio.play();
 
     let count = 1;
