@@ -1,10 +1,11 @@
 {
   "name": "mock-audio-element-adv",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "minimum implementation of HTML5 Audio events",
   "main": "lib",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "engines": {
     "npm": "^3.3.9"
@@ -13,9 +14,8 @@
     "start": "mocha --compilers js:espower-babel/guess --bail --full-trace --watch",
     "test": "cross-env NODE_ENV=test nyc mocha",
     "posttest": "eslint src test",
-    "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
-    "compile": "babel src --out-dir lib",
-    "postinstall": "npm run compile"
+    "prepare": "npm run compile",
+    "compile": "babel src --out-dir lib"
   },
   "config": {
     "ghooks": {
