@@ -14,7 +14,8 @@
     "test": "cross-env NODE_ENV=test nyc mocha",
     "posttest": "eslint src test",
     "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
-    "compile": "babel src --out-dir lib"
+    "compile": "babel src --out-dir lib",
+    "postinstall": "npm run compile"
   },
   "config": {
     "ghooks": {
