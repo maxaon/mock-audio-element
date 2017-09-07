@@ -1,6 +1,6 @@
 {
   "name": "mock-audio-element-adv",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "minimum implementation of HTML5 Audio events",
   "main": "lib",
   "files": [
