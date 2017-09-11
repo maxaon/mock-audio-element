@@ -30,3 +30,4 @@ maven
 coverage
 debug.log
 package-lock.json
+lib
